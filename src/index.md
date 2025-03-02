@@ -6,10 +6,6 @@ hero:
   name: "Allan's Notebook"
   text: "一个关于编程的记事本"
   tagline: Stay hungry, stay foolish
-  actions:
-    - theme: brand
-      text: Examples
-      link: /examples/
 
 features:
   - title: 前端笔记 📒
@@ -22,6 +18,6 @@ features:
 
 ## 关于本站
 
-本站基于 [VitePress](https://vitepress.dev/zh/) 快速搭建，并通过 [Github Actions](https://docs.github.com/zh/actions) + [Github Pages](https://docs.github.com/zh/pages) 进行自动化构建部署。
+基于 [VitePress](https://vitepress.dev/zh/) 快速搭建。
 
-访问 [allan1in.github.io/notebook/](https://allan1in.github.io/notebook/) 以获取更多内容。
+访问 [github.com/allan1in/notebook](https://github.com/allan1in/notebook) 可查看代码仓库。
