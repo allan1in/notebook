@@ -7,14 +7,14 @@ export default defineConfig({
   base: "/notebook/",
   srcDir: "./src",
   themeConfig: {
+    // https://vitepress.dev/reference/default-theme-config
     lastUpdated: {
       text: "最后更新于",
     },
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "前端", link: "/front-end/index.md" },
-      { text: "算法", link: "/algorithm/index.md" },
-      { text: "问题", link: "/issues/index.md" },
+      { text: "前端", link: "/front-end/", activeMatch: "/front-end/" },
+      { text: "算法", link: "/algorithm/", activeMatch: "/algorithm/" },
+      { text: "问题", link: "/issues/", activeMatch: "/issues/" },
     ],
 
     socialLinks: [{ icon: "github", link: "https://github.com/allan1in" }],
@@ -60,7 +60,6 @@ export default defineConfig({
             { text: "兼容性", link: "/front-end/css/9_compatibility" },
           ],
         },
-
         {
           text: "Javascript",
           collapsed: true,
@@ -103,19 +102,14 @@ export default defineConfig({
             },
           ],
         },
-        {
-          text: "SASS",
-          collapsed: true,
-          items: [
-            { text: "链接", link: "/front-end/sass/0_links" },
-            { text: "介绍", link: "/front-end/sass/1_grammar" },
-          ],
-        },
       ],
       "/algorithm/": [
         {
-          text: "算法",
-          items: [{ text: "Index", link: "/algorithm/" }],
+          text: "代码随想录",
+          items: [
+            { text: "链接", link: "/algorithm/programmercarl/0_links" },
+            { text: "数组", link: "/algorithm/programmercarl/1_array" },
+          ],
         },
       ],
       "/issues/": [

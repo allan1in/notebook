@@ -68,7 +68,9 @@ underline，历史遗留，无语义，下划线，万不得已才使用
 
 anchor，锚
 
-`<a href="https://www.mozilla.org/zh-CN/">Mozilla 主页</a>`
+```html
+<a href="https://www.mozilla.org/zh-CN/">Mozilla 主页</a>
+```
 
 - 标签内可嵌套块级内容，使其成为块级链接
 - title 属性，鼠标悬停在链接上时会显示补充信息
@@ -76,11 +78,17 @@ anchor，锚
 - target 属性，\_blank 链接在新页面打开，\_self 链接在此页面打开
 - 最佳实践
 
-`<a href="https://www.mozilla.org/firefox/"> 下载 Firefox </a>`
+```html
+<a href="https://www.mozilla.org/firefox/"> 下载 Firefox </a>
+```
 
 标签内容不要出现链接的地址或“点击此处”、“链接”等字样
 
-`<a href="https://www.example.com/large-report.pdf"> 下载销售报告（PDF，大小为 10 MB）</a>`
+```html
+<a href="https://www.example.com/large-report.pdf">
+  下载销售报告（PDF，大小为 10 MB）</a
+>
+```
 
 如果链接指向非 html 文件的资源，如视频、文档等，要留下清晰的提示
 
@@ -88,7 +96,13 @@ anchor，锚
 
 - 电子邮件链接，可以配置收件人、抄送、主题、内容，点击后会打开邮件应用
 
-`<a href="mailto:nowhere@mozilla.org?cc=name2@rapidtables.com&bcc=name3@rapidtables.com&subject=The%20subject%20of%20the%20email&body=The%20body%20of%20the%20email"> 发送含有 cc、bcc、主题和主体的邮件</a>`
+```html
+<a
+  href="mailto:nowhere@mozilla.org?cc=name2@rapidtables.com&bcc=name3@rapidtables.com&subject=The%20subject%20of%20the%20email&body=The%20body%20of%20the%20email"
+>
+  发送含有 cc、bcc、主题和主体的邮件</a
+>
+```
 
 %20 表示空格，详见[URL 编码](https://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E5%8F%B7%E7%BC%96%E7%A0%81)
 
@@ -141,13 +155,17 @@ quote，行内引用，将标签里的内容用引号包裹，cite 属性表示�
 
 表示引用源，虽然有属性 cite，但是浏览器、屏幕阅读器并没有对其充分利用，因此有了标签 \<cite> 用于显示引用源，一般习惯于和 \<a> 标签组合使用
 
-`<a href="/zh-CN/docs/Web/HTML/Element/q"> <cite>MDN q page</cite></a>`
+```html
+<a href="/zh-CN/docs/Web/HTML/Element/q"> <cite>MDN q page</cite></a>
+```
 
 ## \<abbr>
 
 abbreviation，缩略语，文字有点下划线，在文字上悬浮会展示 title 属性（缩略语的全称）
 
-`<abbr title="超文本标记语言（Hyper text Markup Language）">HTML</abbr>`
+```html
+<abbr title="超文本标记语言（Hyper text Markup Language）">HTML</abbr>
+```
 
 ## \<sup>
 
