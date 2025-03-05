@@ -445,13 +445,16 @@ if (fast > slow) {
  * @return {boolean}
  */
 var backspaceCompare = function (s, t) {
+  // 为两个字符串分别设置指针，从末尾开始扫描
   let pointS = s.length - 1;
   let pointT = t.length - 1;
   let skipS = 0;
   let skipT = 0;
 
+  // 直到两个字符串都扫描完才停止
   while (pointS >= 0 || pointT >= 0) {
-    // 进行退格操作，将 pointS 移动到 s 中的下一个元素
+    // 进行退格操作，将 pointS 移动到 s 中的下一个有效元素
+    // 越界时停止
     while (pointS >= 0) {
       if (s[pointS] === "#") {
         skipS++;
@@ -460,6 +463,7 @@ var backspaceCompare = function (s, t) {
         skipS--;
         pointS--;
       } else {
+        // 没有退格符，并且已经退格完毕，则退出
         break;
       }
     }
@@ -477,18 +481,22 @@ var backspaceCompare = function (s, t) {
       }
     }
 
+    // 现在，指针均已指向有效字符上，接下来进行分类讨论
+
+    // 指针均未越界
     if (pointS >= 0 && pointT >= 0) {
-      //
+      // 如果有效字符不相等，说明不一致
       if (s[pointS] !== t[pointT]) {
         return false;
       }
     } else {
-      // 两个数组的指针有一个到头，有一个没到头，说明长度不一样
+      // 有一个指针没越界，说明长度不一样
       if (pointS >= 0 || pointT >= 0) {
         return false;
       }
     }
 
+    // 每次对比完一个有效字符，移动指针
     pointS--;
     pointT--;
   }
@@ -496,3 +504,57 @@ var backspaceCompare = function (s, t) {
   return true;
 };
 ```
+
+## 有序数组的平方
+
+[leetcode.cn/problems/squares-of-a-sorted-array/](https://leetcode.cn/problems/squares-of-a-sorted-array/)
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var sortedSquares = function (nums) {
+  let start = 0;
+  let end = nums.length - 1;
+  let sqrtStart;
+  let sqrtEnd;
+  const result = new Array(nums.length);
+  let index = nums.length - 1;
+
+  while (start <= end) {
+    sqrtStart = nums[start] * nums[start];
+    sqrtEnd = nums[end] * nums[end];
+    if (sqrtStart > sqrtEnd) {
+      result[index--] = sqrtStart;
+      start++;
+    } else {
+      result[index--] = sqrtEnd;
+      end--;
+    }
+  }
+
+  return result;
+};
+```
+
+### 时间复杂度
+
+O(n)
+
+### 优化
+
+数组的 push() 会动态扩展数组，效率较低
+
+采用固定长度的数组进行优化
+
+```js
+// 创建定长数组
+const result = new Array(nums.length);
+
+let index = nums.length - 1;
+// 通过下标赋值
+result[index--] = sqrtStart;
+```
+
+## 长度最小的子数组
