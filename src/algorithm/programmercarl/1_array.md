@@ -36,6 +36,22 @@ var search = function (nums, target) {
 
 O(log n)
 
+时间复杂度为什么是 O(log n) ？
+
+```
+假设数组长度为 n，二分查找的步骤如下：
+
+初始范围：n 个元素
+第一次查找：缩小到 n/2 个元素
+第二次查找：缩小到 n/4 个元素
+第三次查找：缩小到 n/8 个元素
+......
+
+进行 k 次后，搜索范围缩小到 1，即 n / 2^k = 1
+
+所以，时间复杂度是 O(log n)。
+```
+
 ### 问题
 
 为什么是 mid = left + ((right - left) >> 1)？
@@ -57,22 +73,6 @@ int mid
 
 mid = (left + right) / 2;  // 可能溢出！
 mid = left + (right - left) / 2; // 不容易溢出
-```
-
-时间复杂度为什么是 O(log n) ？
-
-```
-假设数组长度为 n，二分查找的步骤如下：
-
-初始范围：n 个元素
-第一次查找：缩小到 n/2 个元素
-第二次查找：缩小到 n/4 个元素
-第三次查找：缩小到 n/8 个元素
-......
-
-进行 k 次后，搜索范围缩小到 1，即 n / 2^k = 1
-
-所以，时间复杂度是 O(log n)。
 ```
 
 ## 搜索插入位置
@@ -558,3 +558,147 @@ result[index--] = sqrtStart;
 ```
 
 ## 长度最小的子数组
+
+[leetcode.cn/problems/minimum-size-subarray-sum/](https://leetcode.cn/problems/minimum-size-subarray-sum/)
+
+滑动窗口
+
+```js
+/**
+ * @param {number} target
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minSubArrayLen = function (target, nums) {
+  let result = Infinity;
+  let left = 0;
+  let right = 0;
+  let sum = 0;
+
+  // 扩大窗口
+  while (right < nums.length) {
+    sum += nums[right];
+
+    // 缩小窗口
+    while (sum >= target) {
+      // 更新结果
+      result = Math.min(result, right - left + 1);
+      sum -= nums[left];
+      left++;
+    }
+    right++;
+  }
+
+  return result == Infinity ? 0 : result;
+};
+```
+
+### 时间复杂度
+
+O(n)
+
+为什么不是 O(n²)？
+
+```
+O(n²) 发生的典型情况是嵌套循环中，每个元素都可能执行 O(n) 次。
+
+在滑动窗口中：
+
+left 指针收缩窗口，最多移动 n 次
+right 指针扩大窗口，最多移动 n 次
+因此每一个元素最多被访问 2n 次，所以是 O(2n) ≈ O(n)
+```
+
+## 水果成篮
+
+[leetcode.cn/problems/fruit-into-baskets/](https://leetcode.cn/problems/fruit-into-baskets/)
+
+```js
+var totalFruit = function (fruits) {
+  let result = 0;
+  let left = 0;
+  let window = new Map();
+
+  // 扩大窗口
+  for (let right = 0; right < fruits.length; right++) {
+    window.set(fruits[right], (window.get(fruits[right]) || 0) + 1);
+
+    // 当窗口中水果种类超过两种时，收缩窗口
+    while (window.size > 2) {
+      const leftFruit = fruits[left];
+      window.set(leftFruit, window.get(leftFruit) - 1);
+      if (window.get(leftFruit) === 0) {
+        window.delete(leftFruit);
+      }
+      left++;
+    }
+
+    // 更新结果
+    result = Math.max(result, right - left + 1);
+  }
+
+  return result;
+};
+```
+
+### 时间复杂度
+
+O(n)
+
+## 最小覆盖子串
+
+[leetcode.cn/problems/minimum-window-substring/](https://leetcode.cn/problems/minimum-window-substring/)
+
+```js
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function (s, t) {
+  let left = 0;
+  let minLength = Infinity;
+  let start = 0;
+  let matchCount = 0;
+  const need = new Map();
+  const window = new Map();
+
+  // 获取需要的字符数
+  for (let char of t) {
+    need.set(char, (need.get(char) || 0) + 1);
+  }
+
+  // 扩大窗口
+  for (let right = 0; right < s.length; right++) {
+    window.set(s[right], (window.get(s[right]) || 0) + 1);
+
+    // 记录字符匹配的数目
+    if (window.get(s[right]) <= need.get(s[right])) {
+      matchCount++;
+    }
+
+    // 字符数目相等时缩小窗口
+    while (matchCount == t.length) {
+      // 更新最小长度
+      if (right - left + 1 < minLength) {
+        minLength = right - left + 1;
+        start = left;
+      }
+
+      // 缩小窗口
+      window.set(s[left], window.get(s[left]) - 1);
+      // 更新匹配个数
+      if (window.get(s[left]) < need.get(s[left])) {
+        matchCount--;
+      }
+      left++;
+    }
+  }
+
+  return minLength === Infinity ? "" : s.substr(start, minLength);
+};
+```
+
+### 时间复杂度
+
+O(n)
