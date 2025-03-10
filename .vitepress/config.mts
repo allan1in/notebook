@@ -11,6 +11,9 @@ export default defineConfig({
     lastUpdated: {
       text: "最后更新于",
     },
+    search: {
+      provider: "local",
+    },
     nav: [
       { text: "前端", link: "/front-end/", activeMatch: "/front-end/" },
       { text: "算法", link: "/algorithm/", activeMatch: "/algorithm/" },
