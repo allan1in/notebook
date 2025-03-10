@@ -687,7 +687,7 @@ var minWindow = function (s, t) {
 
       // 缩小窗口
       window.set(s[left], window.get(s[left]) - 1);
-      // 更新匹配个数
+      // 如果删去的是需要的字符，更新匹配个数
       if (window.get(s[left]) < need.get(s[left])) {
         matchCount--;
       }
@@ -702,3 +702,211 @@ var minWindow = function (s, t) {
 ### 时间复杂度
 
 O(n)
+
+### js 截取字符串
+
+1. slice(start, end)
+2. substring(start, end)
+3. substr(start, length)
+
+## 螺旋矩阵 II
+
+[leetcode.cn/problems/spiral-matrix-ii/](https://leetcode.cn/problems/spiral-matrix-ii/)
+
+```js
+/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+var generateMatrix = function (n) {
+  const result = Array.from({ length: n }, () => new Array(n).fill(0));
+  let left = 0;
+  let right = n - 1;
+  let top = 0;
+  let bottom = n - 1;
+  let num = 1;
+
+  while (left <= right && top <= bottom) {
+    for (let i = left; i <= right; i++) {
+      result[top][i] = num;
+      num++;
+    }
+    top++;
+
+    for (let i = top; i <= bottom; i++) {
+      result[i][right] = num;
+      num++;
+    }
+    right--;
+
+    for (let i = right; i >= left; i--) {
+      result[bottom][i] = num;
+      num++;
+    }
+    bottom--;
+
+    for (let i = bottom; i >= top; i--) {
+      result[i][left] = num;
+      num++;
+    }
+    left++;
+  }
+
+  return result;
+};
+```
+
+### 时间复杂度
+
+O(n²)
+
+### js 初始化二维数组
+
+```js
+Array.from({ length: n }, () => new Array(n).fill(0));
+```
+
+## 螺旋矩阵
+
+[leetcode.cn/problems/spiral-matrix/](https://leetcode.cn/problems/spiral-matrix/)
+
+```js
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function (matrix) {
+  let width = matrix[0].length;
+  let height = matrix.length;
+  const result = new Array(width * height).fill(0);
+  let left = 0;
+  let right = width - 1;
+  let top = 0;
+  let bottom = height - 1;
+  let index = 0;
+
+  while (left <= right && top <= bottom) {
+    for (let i = left; i <= right; i++) {
+      result[index] = matrix[top][i];
+      index++;
+    }
+    top++;
+
+    for (let i = top; i <= bottom; i++) {
+      result[index] = matrix[i][right];
+      index++;
+    }
+    right--;
+
+    // 矩阵不一定是正方形，之前进行了 top++ 操作，所以需要额外判断防止越界
+    if (top <= bottom) {
+      for (let i = right; i >= left; i--) {
+        result[index] = matrix[bottom][i];
+        index++;
+      }
+      bottom--;
+    }
+
+    // 矩阵不一定是正方形，之前进行了 right-- 操作，所以需要额外判断防止越界
+    if (left <= right) {
+      for (let i = bottom; i >= top; i--) {
+        result[index] = matrix[i][left];
+        index++;
+      }
+      left++;
+    }
+  }
+
+  return result;
+};
+```
+
+### 时间复杂度
+
+O(m \* n)
+
+## 前缀和
+
+[kamacoder.com/problempage.php?pid=1070](https://kamacoder.com/problempage.php?pid=1070)
+
+```js
+// 解决方法
+const solution = (arr, range) => {
+  let sum = 0;
+  const sumArr = [];
+
+  // 计算前缀和
+  arr.forEach((num) => {
+    sum += num;
+    sumArr.push(sum);
+  });
+
+  // 根据每个范围输出结果
+  range.forEach(([start, end]) => {
+    const startNum = start === 0 ? 0 : sumArr[start - 1];
+    console.log(sumArr[end] - startNum);
+  });
+};
+
+// node 输入输出
+const rl = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+const inputs = [];
+
+// 每当输入流收到行尾输入（\n、\r 或 \r\n）时，就会发出 line 事件
+rl.on("line", (line) => inputs.push(line));
+
+// 监听输入完毕事件
+rl.on("close", () => {
+  // 获取数组长度，+ 将 string 转换为 number
+  const n = +inputs[0];
+  // 根据数组长度获取数组元素，并转换为 number
+  const arr = inputs.slice(1, n + 1).map((num) => +num);
+  // 以二维数组的形式记录所有查询区间
+  const range = inputs
+    .slice(n + 1)
+    .map((str) => str.split(" ").map((num) => +num));
+  // 调用解决方法
+  solution(arr, range);
+});
+```
+
+### 时间复杂度
+
+n 是数组长度，q 是查询的区间数
+
+O(n + q)
+
+### node 的输入输出
+
+[nodejs.org/api/readline.html](https://nodejs.org/api/readline.html)
+
+```js
+const rl = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+const inputs = [];
+
+rl.on("line", (line) => inputs.push(line));
+rl.on("close", () => {
+  // 对输入进行处理
+  // 调用解决方法
+});
+```
+
+### js 中 string 转 number
+
+```js
+let s = "1";
+
++s;
+
+parseInt(s);
+Number.parseInt(s);
+
+parseFloat(s);
+Number.parseFloat(s);
+```
