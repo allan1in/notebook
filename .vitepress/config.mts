@@ -112,6 +112,7 @@ export default defineConfig({
           items: [
             { text: "链接", link: "/algorithm/programmercarl/0_links" },
             { text: "数组", link: "/algorithm/programmercarl/1_array" },
+            { text: "链表", link: "/algorithm/programmercarl/2_linked-list" },
           ],
         },
       ],

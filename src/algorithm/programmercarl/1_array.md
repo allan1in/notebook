@@ -1,5 +1,37 @@
 # 数组
 
+### 二分法
+
+- [二分查找](#二分查找)
+- [搜索插入位置](#搜索插入位置)
+- [在排序数组中查找元素的第一个和最后一个位置](#在排序数组中查找元素的第一个和最后一个位置)
+- [x 的平方根](#x-的平方根)
+- [有效的完全平方数](#有效的完全平方数)
+
+### 双指针法
+
+- [移除元素](#移除元素)
+- [删除有序数组中的重复项](#删除有序数组中的重复项)
+- [移动零](#移动零)
+- [比较含退格的字符串](#比较含退格的字符串)
+- [有序数组的平方](#有序数组的平方)
+
+### 滑动窗口
+
+- [长度最小的子数组](#长度最小的子数组)
+- [水果成篮](#水果成篮)
+- [最小覆盖子串](#最小覆盖子串)
+
+### 模拟行为
+
+- [螺旋矩阵 II](#螺旋矩阵-II)
+- [螺旋矩阵](#螺旋矩阵)
+
+### 前缀和
+
+- [区间和](#区间和)
+- [开发商购买土地](#开发商购买土地)
+
 ## 二分查找
 
 [leetcode.cn/problems/binary-search/](https://leetcode.cn/problems/binary-search/)
@@ -825,21 +857,20 @@ var spiralOrder = function (matrix) {
 
 O(m \* n)
 
-## 前缀和
+## 区间和
 
 [kamacoder.com/problempage.php?pid=1070](https://kamacoder.com/problempage.php?pid=1070)
 
 ```js
 // 解决方法
-const solution = (arr, range) => {
-  let sum = 0;
-  const sumArr = [];
+const solution = (n, arr, range) => {
+  const sum = new Array(n);
 
   // 计算前缀和
-  arr.forEach((num) => {
-    sum += num;
-    sumArr.push(sum);
-  });
+  sum[0] = arr[0];
+  for (let i = 1; i < n; i++) {
+    sum[i] = sum[i - 1] + arr[i];
+  }
 
   // 根据每个范围输出结果
   range.forEach(([start, end]) => {
@@ -869,7 +900,7 @@ rl.on("close", () => {
     .slice(n + 1)
     .map((str) => str.split(" ").map((num) => +num));
   // 调用解决方法
-  solution(arr, range);
+  solution(n, arr, range);
 });
 ```
 
@@ -909,4 +940,84 @@ Number.parseInt(s);
 
 parseFloat(s);
 Number.parseFloat(s);
+```
+
+### slice()
+
+```js
+array.slice(start, end);
+```
+
+start（可选）：起始索引（包含），默认 0。
+
+end（可选）：结束索引（不包含），默认 array.length。
+
+返回：一个新数组，不改变原数组。
+
+## 开发商购买土地
+
+[kamacoder.com/problempage.php?pid=1044](https://kamacoder.com/problempage.php?pid=1044)
+
+```js
+function solution(m, n, arr) {
+  // 分别用数组记录每行之和，每列之和
+  const row = new Array(n).fill(0);
+  const col = new Array(m).fill(0);
+  // 总和，用于计算差值
+  let sum = 0;
+  // 行的累加和
+  let sumRow = 0;
+  // 列的累加和，用于计算差值
+  let sumCol = 0;
+  // 记录最小差值
+  let min = Infinity;
+
+  // 记录总数以及每行之和
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      row[i] += arr[i][j];
+      sum += arr[i][j];
+    }
+  }
+
+  // 记录每列之和
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      col[i] += arr[j][i];
+    }
+  }
+
+  // 按行划分，并记录最小值
+  for (let i = 0; i < n; i++) {
+    sumRow += row[i];
+    min = Math.min(min, Math.abs(sum - 2 * sumRow));
+  }
+
+  // 按列划分，并记录最小值
+  for (let i = 0; i < m; i++) {
+    sumCol += col[i];
+    min = Math.min(min, Math.abs(sum - 2 * sumCol));
+  }
+
+  console.log(min);
+}
+
+const rl = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+const inputs = [];
+
+rl.on("line", (line) => inputs.push(line));
+rl.on("close", () => {
+  // 这里用 Number 构造函数作为参数，等价于 (num)=>+num
+  let [n, m] = inputs[0].split(" ").map(Number);
+  const arr = Array.from({ length: n }, () => new Array(m).fill(0));
+
+  for (let i = 0; i < n; i++) {
+    arr[i] = inputs[i + 1].split(" ").map(Number);
+  }
+
+  solution(m, n, arr);
+});
 ```
