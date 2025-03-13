@@ -284,3 +284,179 @@ var swapPairs = function (head) {
 ```
 
 这样在交换过后，会让 dummy 指向链表中原先的头节点，丢失对新头节点的引用
+
+## 删除链表的倒数第 N 个结点
+
+[leetcode.cn/problems/remove-nth-node-from-end-of-list/](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function (head, n) {
+  // 需要删除，所以要设置虚拟节点
+  let dummy = new ListNode(0, head);
+  let fast = dummy;
+  let slow = dummy;
+
+  // 移动快指针，使得快慢指针相距 n 个节点
+  while (n-- > 0) {
+    fast = fast.next;
+  }
+
+  // 同步移动快慢指针，直到快指针到尽头，此时慢指针的位置是目标节点的前一个节点
+  while (fast.next) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+
+  slow.next = slow.next.next;
+
+  return dummy.next;
+};
+```
+
+### 时间复杂度
+
+O(n)
+
+## 链表相交
+
+[leetcode.cn/problems/intersection-of-two-linked-lists-lcci/](https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/)
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} headA
+ * @param {ListNode} headB
+ * @return {ListNode}
+ */
+var getIntersectionNode = function (headA, headB) {
+  // 获取链表长度
+  const getLength = (head) => {
+    let curr = new ListNode(0, head);
+    let length = 0;
+
+    while (curr.next) {
+      curr = curr.next;
+      length++;
+    }
+
+    return length;
+  };
+
+  const lengthA = getLength(headA);
+  const lengthB = getLength(headB);
+  let result = null;
+
+  let shortList = lengthA < lengthB ? headA : headB;
+  let longList = lengthA < lengthB ? headB : headA;
+  let pointShort = shortList;
+  let pointLong = longList;
+
+  // 后移较长链表上的指针，这样相当于将两个链表尾部对齐
+  let distance = Math.abs(lengthA - lengthB);
+  while (distance-- > 0) {
+    pointLong = pointLong.next;
+  }
+
+  // 对比链表剩余的节点，一致则返回交点
+  while (pointShort && pointLong) {
+    if (pointLong === pointShort) {
+      result = pointShort;
+      break;
+    }
+    pointShort = pointShort.next;
+    pointLong = pointLong.next;
+  }
+
+  return result;
+};
+```
+
+### 时间复杂度
+
+O(m + n)
+
+## 环形链表 II
+
+[leetcode.cn/problems/linked-list-cycle-ii/](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var detectCycle = function (head) {
+  // 对于空链表，没有环
+  if (!head) return null;
+  let slow = head;
+  let fast = head;
+
+  // 移动快慢指针，直到移动到头或两者相遇
+  while (fast && fast.next) {
+    fast = fast.next.next;
+    slow = slow.next;
+    // 这里要在循环内判断，否则因为一开始是相遇的，会提前终止循环
+    if (fast == slow) {
+      break;
+    }
+  }
+  // 如果有 null，说明没有环
+  if (!fast || !fast.next) return null;
+
+  // 将慢指针指向 head，此时快指针在相遇位置
+  slow = head;
+  // 不断移动快慢指针，相遇位置即环的入口
+  while (slow != fast) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+
+  return slow;
+};
+```
+
+### 时间复杂度
+
+O(n)
+
+### 解析
+
+设 x 为 head 到环入口的距离，设 y 为环入口到快慢指针相遇位置的距离，设 z 为快慢指针相遇位置到环入口的距离，因为快指针的移动速度是慢指针的 2 倍，可以得到：
+
+2 \* (x + y) = x + y + n \* (y + z)
+
+其中 n 是快指针在环中移动的圈数
+
+x + y = n \* (y + z)
+
+x = (n - 1) \* (y + z) + z
+
+因为快指针要在环内追上慢指针，所以 n >= 1
+
+**即一个指针从快慢指针相遇点开始移动，一个指针开始从头节点开始移动，两者速度相同，最终它们会在环入口相遇**
