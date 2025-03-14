@@ -139,8 +139,184 @@ O(n)
 
 ## 找到字符串中所有字母异位词
 
+滑动窗口 + 哈希表
+
 [leetcode.cn/problems/find-all-anagrams-in-a-string/](https://leetcode.cn/problems/find-all-anagrams-in-a-string/)
 
 ```js
+/**
+ * @param {string} s
+ * @param {string} p
+ * @return {number[]}
+ */
+var findAnagrams = function (s, p) {
+  const need = new Array(26).fill(0);
+  let left = 0;
+  const answer = new Array();
 
+  // 记录 p 中每个字母出现的次数
+  for (let char of p) {
+    need[char.charCodeAt(0) - 97]++;
+  }
+
+  // 扩大窗口
+  for (let right = 0; right < s.length; right++) {
+    // 扩大窗口时，减少字母出现次数
+    let char = s[right];
+    need[char.charCodeAt(0) - 97]--;
+
+    // 字母出现次数小于 0，说明窗口内有不需要的字符，因此不断向右移动左指针，直到窗口中不再包含这个字符
+    while (need[char.charCodeAt(0) - 97] < 0) {
+      need[s[left].charCodeAt(0) - 97]++;
+      left++;
+    }
+
+    // 如果此时窗口长度与 p 的长度相等，说明得到了异位词
+    if (right - left + 1 === p.length) {
+      answer.push(left);
+    }
+  }
+
+  return answer;
+};
 ```
+
+### 时间复杂度
+
+O(m + n)
+
+## 两个数组的交集
+
+[leetcode.cn/problems/intersection-of-two-arrays/](https://leetcode.cn/problems/intersection-of-two-arrays/)
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var intersection = function (nums1, nums2) {
+  const hash = new Map();
+  const answer = new Array();
+
+  for (let num of nums1) {
+    // 不用记录次数，因为返回的是交集，集合中不能有重复的元素
+    hash.set(num, 1);
+  }
+
+  for (let num of nums2) {
+    if (hash.has(num)) {
+      answer.push(num);
+      hash.delete(num);
+    }
+  }
+
+  return answer;
+};
+```
+
+### 时间复杂度
+
+O(m + n)
+
+## 两个数组的交集 II
+
+[leetcode.cn/problems/intersection-of-two-arrays-ii/](https://leetcode.cn/problems/intersection-of-two-arrays-ii/)
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var intersect = function (nums1, nums2) {
+  const hash = new Map();
+  const answer = new Array();
+
+  // 需要记录出现次数，因为结果中出现的元素，应与元素在两个数组中都出现的次数一致
+  for (let num of nums1) {
+    hash.set(num, (hash.get(num) || 0) + 1);
+  }
+
+  for (let num of nums2) {
+    if (hash.has(num) && hash.get(num) > 0) {
+      answer.push(num);
+      hash.set(num, hash.get(num) - 1);
+    }
+  }
+
+  return answer;
+};
+```
+
+### 时间复杂度
+
+O(m + n)
+
+## 快乐数
+
+[leetcode.cn/problems/happy-number/](https://leetcode.cn/problems/happy-number/)
+
+```js
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+var isHappy = function (n) {
+  const seen = new Set();
+
+  while (n !== 1 && !seen.has(n)) {
+    seen.add(n);
+    n = n
+      .toString()
+      .split("")
+      .reduce((sum, digit) => sum + digit * digit, 0);
+  }
+
+  return n === 1;
+};
+```
+
+### 时间复杂度
+
+O(log n)
+
+### reduce()
+
+array.reduce(callback(accumulator, currentValue, index, array), initialValue);
+
+- callback：累加器函数，对数组中的每个元素执行。
+- accumulator：累加器的值，初始值为 initialValue，或者是数组的第一个元素（如果没有提供 initialValue）。
+- currentValue：当前处理的数组元素。
+- index（可选）：当前元素的索引。
+- array（可选）：调用 reduce 的数组。
+- initialValue（可选）：累加器的初始值。如果未提供，则使用数组的第一个元素作为初始值。
+
+## 两数之和
+
+[leetcode.cn/problems/two-sum/](https://leetcode.cn/problems/two-sum/)
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function (nums, target) {
+  const hash = new Map();
+
+  for (let i = 0; i < nums.length; i++) {
+    let need = target - nums[i];
+    // 查询是否有需要的数字
+    if (hash.has(need)) {
+      return [hash.get(need), i];
+    }
+    // 将当前数字存入，保证在查询后存入，这样不会有重复的结果
+    hash.set(nums[i], i);
+  }
+};
+```
+
+### 时间复杂度
+
+O(n)
