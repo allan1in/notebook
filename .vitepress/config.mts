@@ -108,6 +108,13 @@ export default defineConfig({
       ],
       "/algorithm/": [
         {
+          text: "hot100",
+          items: [
+            { text: "简单", link: "/algorithm/hot100/0_easy" },
+            { text: "中等", link: "/algorithm/hot100/1_medium" }
+          ],
+        },
+        {
           text: "代码随想录",
           items: [
             { text: "链接", link: "/algorithm/programmercarl/0_links" },
